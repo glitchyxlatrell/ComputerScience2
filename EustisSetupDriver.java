@@ -1,4 +1,4 @@
-/*	INSERT STUDENT NAME
+/*	Latrell Kong
 	Eustis Setup
 	COP3503 Computer Science 2
 	EustisSetupDriver.java
