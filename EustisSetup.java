@@ -4,6 +4,7 @@
     EustisSetup.java
 */
 
+// imports
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +13,7 @@ import java.math.RoundingMode;
 
 public class EustisSetup{
 
+    // problem 1 - simple print statements
     public void printMessages(){
         System.out.println("The current month is January.");
         System.out.println("The current year is 2026.");
@@ -20,6 +22,7 @@ public class EustisSetup{
         System.out.println("Stranger Things Season 5 came out recently on Netflix!");
     }
 
+    // problem 2 - computing 
     public int computeScore(int numCoins, double multiplier, int bonus){
         double score = numCoins * 10 * multiplier;
         score += bonus;
