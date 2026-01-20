@@ -1,0 +1,5 @@
+The current month is January.
+The current year is 2026.
+I am a CS2 student this semester!
+I am so excited to learn more algorithms and advanced data structures!
+Stranger Things Season 5 came out recently on Netflix!

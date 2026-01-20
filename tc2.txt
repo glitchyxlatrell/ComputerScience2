@@ -1,0 +1,5 @@
+Mario's score is 150
+Mario's score is 230
+Mario's score is 100
+Mario's score is 460
+Mario's score is 850

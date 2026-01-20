@@ -1,0 +1,5 @@
+Pokemon{name = 'Pikachu', level = 25, power = 30.0}
+Pokemon{name = 'Charizard', level = 1, power = 45.5}
+Pokemon{name = 'Magikarp', level = 1, power = 0.0}
+Pokemon{name = 'Venusaur', level = 65, power = 180.0}
+Pokemon{name = 'Blastoise', level = 100, power = 224.0}
