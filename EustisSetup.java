@@ -163,6 +163,4 @@ public class EustisSetup{
         System.out.println("Top ROI: " + titleMax + " (" + roiFormat.format(roiMax) + ")");
         System.out.println("Poor: " + numPoor + " | Underperformer: " + numUnderPer + " | Break Even: " + numBreakEven + " | Hit: " + numHit + " | Blockbuster: " + numBlockBust);
     }
-
-
 }
