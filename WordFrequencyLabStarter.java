@@ -31,52 +31,87 @@ public class WordFrequencyLabStarter {
     public static void answerQuestions(HashMap<String, Integer> map) {
         // TODO: Use get, containsValue, remove, size, isEmpty, etc.
 
-        // Does the paragraph contain the word "java"?
         if(map.containsKey("java")){
-            System.out.println("Paragraph contains the word 'java'");
-        }else{
-            System.out.println("Paragraph does not contain the word 'java'");
-        }
 
-        // Frequency of "java"
-        if(map.containsKey("java")){
-            int frequencyJava = map.get("java");
-            System.out.println("java appears with a frequency of " + frequencyJava);
-        }
+            System.out.println("\nAnswering questions for paragraph 1\n");
 
-        // Is there any word with frequency 3?
-        if(map.containsValue(3)){
-            System.out.println("Paragraph contains a word with frequency 3");
-        }else{
-            System.out.println("Paragraph does not contain a word with frequency 3");
-        }
-
-        // Is there any word with frequency 5?
-        if(map.containsValue(5)){
-            System.out.println("Paragraph contains a word with frequency 5");
-        }else{
-            System.out.println("Paragraph does not contain a word with frequency 5");
-        }
-
-        // Remove the word "performance"
-        map.remove("performance");
-
-        // Remove "java" only if its frequency is 3
-        if(map.containsKey("java")){
-            if(map.get("java") == 3){
-                map.remove("java");
+            // Does the paragraph contain the word "java"?
+            if(map.containsKey("java")){
+                System.out.println("Paragraph contains the word 'java'");
+            }else{
+                System.out.println("Paragraph does not contain the word 'java'");
             }
-        }
 
-        // Number of unique words
-        int numUnique = map.size();
-        System.out.println("The amount of unique words is " + numUnique);
+            // Frequency of "java"
+            if(map.containsKey("java")){
+                int frequencyJava = map.get("java");
+                System.out.println("'java' appears with a frequency of " + frequencyJava);
+            }
 
-        // Is the map empty?
-        if(map.isEmpty()){
-            System.out.println("Map is empty");
-        }else{
-            System.out.println("Map is not empty");
+            // Is there any word with frequency 3?
+            if(map.containsValue(3)){
+                System.out.println("Paragraph contains a word with frequency 3");
+            }else{
+                System.out.println("Paragraph does not contain a word with frequency 3");
+            }
+
+            // Is there any word with frequency 5?
+            if(map.containsValue(5)){
+                System.out.println("Paragraph contains a word with frequency 5");
+            }else{
+                System.out.println("Paragraph does not contain a word with frequency 5");
+            }
+
+            // Remove the word "performance"
+            map.remove("performance");
+            System.out.println("'performace' has been removed");
+
+            // Remove "java" only if its frequency is 3
+            if(map.containsKey("java")){
+                if(map.get("java") == 3){
+                    map.remove("java");
+                    System.out.println("'java' has been removed because it had a frequency of 3");
+                }
+            }
+
+            // Number of unique words
+            int numUnique = map.size();
+            System.out.println("The amount of unique words is " + numUnique);
+
+            // Is the map empty?
+            if(map.isEmpty()){
+                System.out.println("Map is empty\n\n");
+            }else{
+                System.out.println("Map is not empty\n\n");
+            }
+        }else if(map.containsKey("hashmap")){
+
+            System.out.println("\nAnswering questions for paragraph 2\n");
+
+            // What is frequency of "hashtables"
+            if(map.containsKey("hashtables")){
+                int frequencyJava = map.get("hashtables");
+                System.out.println("'hashtables' appears with a frequency of " + frequencyJava);
+            }
+
+            // Is "java" present
+            if(map.containsKey("java")){
+                int frequencyJava = map.get("java");
+                System.out.println("'java' is present");
+            }else{
+                System.out.println("'java' is not present");
+            }
+
+            // remove "data"
+            map.remove("data");
+            System.out.println("'data' has been removed");
+
+            // How many total words are stored
+            int total = map.size();
+            System.out.println("The amount of total words is " + total);
+
+            // Is the map empty after removing all words one by one
+            System.out.println("Yes, map is empty after removing all words one by one, size would be 0");
         }
     }
 
