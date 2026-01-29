@@ -1,0 +1,5 @@
+Case 5: Timing Only
+Readings size: 50000
+Queries size : 10000
+FAST time (ms): 8.918375
+BF time (ms): 210.837041

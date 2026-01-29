@@ -1,0 +1,5 @@
+Case 1: n=10, q=4
+BF Results:
+[0, 0, 0, 0]
+FAST Results:
+[0, 0, 0, 0]
