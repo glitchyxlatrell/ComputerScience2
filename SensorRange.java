@@ -66,6 +66,7 @@ public class SensorRange
         while(left < right)
         {
             mid = (left + right) / 2;
+            // using <= because readings[mid] may be the index we are looking for (looking for first index with value greater than or equal to left bound)
             if(bound <= readings[mid])
             {
                 right = mid;
@@ -86,6 +87,7 @@ public class SensorRange
         while(left < right)
         {
             mid = (left + right) / 2;
+            // using < because readings[mid] may be the index we are looking for (looking for first index with value greater than rightBound)
             if(bound < readings[mid])
             {
                 right = mid;
