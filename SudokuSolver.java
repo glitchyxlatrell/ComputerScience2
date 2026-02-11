@@ -6,17 +6,23 @@
 
 public class SudokuSolver
 {
+
+    // global variables 
     private int solCounter = 0;
     private boolean firstSolution = false;
     private int[][] onlySolution = new int[9][9];
 
+    // solve function
     public int solve(int[][] board, int[][] forbiddenPairs)
-    {
+    {   
+        // resetting values for each puzzle board
         solCounter = 0;
         firstSolution = false;
         
+        // calling recursive function
         backtrackSolve(board, forbiddenPairs);
 
+        // getting the board values if only one solution
         if(solCounter == 1)
         {
             for(int i = 0; i < 9; i++)
@@ -27,35 +33,44 @@ public class SudokuSolver
                 }
             }
         }
+
         return solCounter;
     }
 
+    // recursive function 
     private void backtrackSolve(int[][] board, int[][] forbiddenPairs)
-    {
+    {   
+        // parsing through board to find first 0
         for(int i = 0; i < 9; i++)
         {
             for(int j = 0; j < 9; j++)
             {
                 if(board[i][j] == 0)
-                {
+                {   
+                    // trying every digit for position
                     for(int x = 1; x < 10; x++)
-                    {
+                    {   
+                        // testing if position is valid for digit
                         if(positionOk(i, j, x, board, forbiddenPairs))
                         {
+                            // inserting value and recursively calling function
                             board[i][j] = x;
-
                             backtrackSolve(board, forbiddenPairs);
                         }
+                        // undoing to backtrack
                         board[i][j] = 0;
                     }
 
+                    // returning after trying all digits
                     return;
                 }
             }
         }
 
+        // adding to solCounter if there is no value that is 0
         solCounter++;
 
+        // checking if first solution, and saving board if it is
         if(!firstSolution)
         {
             firstSolution = true;
@@ -69,6 +84,7 @@ public class SudokuSolver
         }
     }
 
+    // function to check if position is valid for value
     boolean positionOk(int xCor, int yCor, int number, int[][] board, int[][] forbiddenPairs)
     {   
         // checking for row and column rule
@@ -80,6 +96,7 @@ public class SudokuSolver
             }
         }
 
+        // math to find what grid position is in
         int rowGrid = (xCor / 3) * 3;
         int colGrid = (yCor / 3) * 3;
 
@@ -96,15 +113,16 @@ public class SudokuSolver
         }
 
         
-
-        // checking for knight rule (with wrap-around)
+        // arrays for each knight move
         int[] offsetKnightX = {2, 2, -2, -2, 1, 1, -1, -1};
         int[] offsetKnightY = {1, -1, 1, -1, 2, -2, 2, -2};
         int knightX = 0;
         int knightY = 0;
 
+        // checking for knight rule (with wrap-around)
         for(int i = 0; i < 8; i++)
-        {
+        {   
+            // math to account for wrap-around
             knightX = (xCor + offsetKnightX[i] + 9) % 9;
             knightY = (yCor + offsetKnightY[i] + 9) % 9;
 
@@ -114,17 +132,20 @@ public class SudokuSolver
             }
         }
 
-        // checking for orthogonally adjacent forbidden pair (with wrap-around)
+        // array for each orthogonal move
         int[] offsetX = {1, -1, 0, 0};
         int[] offsetY = {0, 0, -1, 1};
         int orthX = 0;
         int orthY = 0;
 
+        // checking for orthogonally adjacent forbidden pair (with wrap-around)
         for(int i = 0; i < 4; i++)
-        {
+        {   
+            // math for wrap-around
             orthX = (xCor + offsetX[i] + 9) % 9;
             orthY = (yCor + offsetY[i] + 9) % 9;
 
+            // checking each forbidden pair
             for(int j = 0; j < forbiddenPairs.length; j++)
             {
                 if(number == forbiddenPairs[j][0] && board[orthX][orthY] == forbiddenPairs[j][1])
