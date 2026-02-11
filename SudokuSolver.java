@@ -19,8 +19,18 @@ public class SudokuSolver
         solCounter = 0;
         firstSolution = false;
         
+        // creating a 2-d boolean array to track all forbidden pairs
+        boolean[][] forbid = new boolean[10][10];
+        for(int i = 0; i < forbiddenPairs.length; i++)
+        {
+            int firstNum = forbiddenPairs[i][0];
+            int secNum = forbiddenPairs[i][1];
+            forbid[firstNum][secNum] = true;
+            forbid[secNum][firstNum] = true;
+        }
+
         // calling recursive function
-        backtrackSolve(board, forbiddenPairs);
+        backtrackSolve(board, forbiddenPairs, forbid);
 
         // getting the board values if only one solution
         if(solCounter == 1)
@@ -38,7 +48,7 @@ public class SudokuSolver
     }
 
     // recursive function 
-    private void backtrackSolve(int[][] board, int[][] forbiddenPairs)
+    private void backtrackSolve(int[][] board, int[][] forbiddenPairs, boolean[][] forbid)
     {   
         // parsing through board to find first 0
         for(int i = 0; i < 9; i++)
@@ -51,11 +61,11 @@ public class SudokuSolver
                     for(int x = 1; x < 10; x++)
                     {   
                         // testing if position is valid for digit
-                        if(positionOk(i, j, x, board, forbiddenPairs))
+                        if(positionOk(i, j, x, board, forbiddenPairs, forbid))
                         {
                             // inserting value and recursively calling function
                             board[i][j] = x;
-                            backtrackSolve(board, forbiddenPairs);
+                            backtrackSolve(board, forbiddenPairs, forbid);
                         }
                         // undoing to backtrack
                         board[i][j] = 0;
@@ -85,7 +95,7 @@ public class SudokuSolver
     }
 
     // function to check if position is valid for value
-    boolean positionOk(int xCor, int yCor, int number, int[][] board, int[][] forbiddenPairs)
+    boolean positionOk(int xCor, int yCor, int number, int[][] board, int[][] forbiddenPairs, boolean[][] forbid)
     {   
         // checking for row and column rule
         for(int i = 0; i < 9; i++)
@@ -146,16 +156,9 @@ public class SudokuSolver
             orthY = (yCor + offsetY[i] + 9) % 9;
 
             // checking each forbidden pair
-            for(int j = 0; j < forbiddenPairs.length; j++)
+            if(forbid[number][board[orthX][orthY]])
             {
-                if(number == forbiddenPairs[j][0] && board[orthX][orthY] == forbiddenPairs[j][1])
-                {
-                    return false;
-                }
-                else if(number == forbiddenPairs[j][1] && board[orthX][orthY] == forbiddenPairs[j][0])
-                {
-                    return false;
-                }
+                return false;
             }
         }
 
