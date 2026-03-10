@@ -135,7 +135,11 @@ public class NetworkPacket
 
     public double getRatio(double avg)
     {
-        return 0.0;
+        int numUnique = stringFreq.size();
+        double fixAvg = Math.log(numUnique) / Math.log(2);
+        fixAvg = Math.ceil(fixAvg);
+
+        return fixAvg / avg;
     }
 
 }
