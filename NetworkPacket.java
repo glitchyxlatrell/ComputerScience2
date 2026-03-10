@@ -77,11 +77,18 @@ public class NetworkPacket
         {
             return;
         }
+
         if(temp.symbol != null)
         {
+            if(tempCode.equals(""))
+            {
+                tempCode = "0";
+            }
+
             binCodes.put(temp.symbol, tempCode);
             return;
         }
+        
         findCodes(temp.left, tempCode + "0");
         findCodes(temp.right, tempCode + "1");
     }
