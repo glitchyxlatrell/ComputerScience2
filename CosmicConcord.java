@@ -15,6 +15,7 @@ public class CosmicConcord {
             return memo[prevA][prevB][K];
         }
 
+
         // initializing to keep track of most optimal pair
         int optimalSol = 0;
 
@@ -44,12 +45,64 @@ public class CosmicConcord {
 
         // putting best solution into current pair
         memo[prevA][prevB][K] = optimalSol;
-        return memo[prevA][prevB];
+        return memo[prevA][prevB][K];
     }
 
     public static int solveTab(int[] A, int[] B, int N, int M, int D, int G, int K) 
     {
-        return 0;
+        int[][][] tab = new int[N + 1][M + 1][K + 1];
+        for (int i = 0; i < N + 1; i++)
+        {
+            for (int j = 0; j < M + 1; j++) 
+            {
+                for (int k = 0; k < K + 1; k++) 
+                {
+                    // initializing to 0
+                    tab[i][j][k] = 0;
+                }
+            }
+        }
+
+
+        int best = 0;
+
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < M; j++) 
+            {
+                for(int k = 0; k <= K; k++)
+                {
+                    if(Math.abs(A[i] - B[j]) <= D)
+                    {
+
+                        // initializing all first pairs
+                        tab[i][j][k] = 1;
+                        best = Math.max(best,1);
+
+                        for(int c = 0; c < i; c++)
+                        {
+                            for(int v = 0; v < j; v++)
+                            {
+                                if((A[i] - A[c] >= G) && (B[j] - B[v] >= G))
+                                {
+                                    tab[i][j][k] = Math.max(tab[i][j][k], 1 + tab[c][v][k]);
+                                }
+                                else if(k > 0)
+                                {
+                                    tab[i][j][k] = Math.max(tab[i][j][k], 1 + tab[c][v][k - 1]);
+                                }
+                                if(tab[i][j][k] > best)
+                                {
+                                    best = tab[i][j][k];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return best;
     }
 
 
