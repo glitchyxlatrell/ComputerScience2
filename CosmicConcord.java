@@ -77,6 +77,16 @@ public class CosmicConcord {
             {
                 for(int k = 0; k <= K; k++)
                 {
+                    // ensuring that highest possible value is in each index, even if no match is made
+                    if (i > 0)
+                    {
+                        tab[i][j][k] = Math.max(tab[i][j][k], tab[i - 1][j][k]);
+                    }
+                    if (j > 0)
+                    {
+                        tab[i][j][k] = Math.max(tab[i][j][k], tab[i][j - 1][k]);
+                    }
+
                     // checking if pair is within D tolerance range
                     if(Math.abs(A[i] - B[j]) <= D)
                     {
