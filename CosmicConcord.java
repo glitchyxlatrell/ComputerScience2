@@ -48,9 +48,13 @@ public class CosmicConcord {
         return memo[prevA][prevB][K];
     }
 
+    // bottom-up iterative tabulation approach 
     public static int solveTab(int[] A, int[] B, int N, int M, int D, int G, int K) 
     {
+        // creating 3-d array to keep track of best solutions
         int[][][] tab = new int[N + 1][M + 1][K + 1];
+
+        // 3-level nested for loop to initialize values
         for (int i = 0; i < N + 1; i++)
         {
             for (int j = 0; j < M + 1; j++) 
@@ -63,34 +67,44 @@ public class CosmicConcord {
             }
         }
 
-
+        // initializing best variable to keep highest number
         int best = 0;
 
+        // three-level nested for loop to check all pairs and with certain amount of K values
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < M; j++) 
             {
                 for(int k = 0; k <= K; k++)
                 {
+                    // checking if pair is within D tolerance range
                     if(Math.abs(A[i] - B[j]) <= D)
                     {
 
-                        // initializing all first pairs
+                        // initializing all first pairs,
                         tab[i][j][k] = 1;
+
+                        // checking best in case of 1-pair high edge case
                         best = Math.max(best,1);
 
+                        // double nested for loop to check for highest possible value in previous pairs
                         for(int c = 0; c < i; c++)
                         {
                             for(int v = 0; v < j; v++)
                             {
+                                // checking if it is a rising step next value in A and B
                                 if((A[i] - A[c] >= G) && (B[j] - B[v] >= G))
-                                {
+                                {   
+                                    // updating current index to highest possible value
                                     tab[i][j][k] = Math.max(tab[i][j][k], 1 + tab[c][v][k]);
                                 }
+                                // if dip step
                                 else if(k > 0)
-                                {
+                                {   
+                                    // updating current index to highest possible value with 1 less dip remaining
                                     tab[i][j][k] = Math.max(tab[i][j][k], 1 + tab[c][v][k - 1]);
                                 }
+                                // putting highest value in best
                                 if(tab[i][j][k] > best)
                                 {
                                     best = tab[i][j][k];
@@ -101,11 +115,8 @@ public class CosmicConcord {
                 }
             }
         }
-
         return best;
     }
-
-
 
     /*
         N and M are lengths of sequences A and B
