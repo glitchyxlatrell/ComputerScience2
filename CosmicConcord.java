@@ -93,22 +93,27 @@ public class CosmicConcord {
                         {
                             for(int v = 0; v < j; v++)
                             {
-                                // checking if it is a rising step next value in A and B
-                                if((A[i] - A[c] >= G) && (B[j] - B[v] >= G))
-                                {   
-                                    // updating current index to highest possible value
-                                    tab[i][j][k] = Math.max(tab[i][j][k], 1 + tab[c][v][k]);
-                                }
-                                // if dip step
-                                else if(k > 0)
-                                {   
-                                    // updating current index to highest possible value with 1 less dip remaining
-                                    tab[i][j][k] = Math.max(tab[i][j][k], 1 + tab[c][v][k - 1]);
-                                }
-                                // putting highest value in best
-                                if(tab[i][j][k] > best)
+
+                                // checking if c and v is a valid pair
+                                if (Math.abs(A[c] - B[v]) <= D)
                                 {
-                                    best = tab[i][j][k];
+                                    // checking if it is a rising step next value in A and B
+                                    if((A[i] - A[c] >= G) && (B[j] - B[v] >= G))
+                                    {   
+                                        // updating current index to highest possible value
+                                        tab[i][j][k] = Math.max(tab[i][j][k], 1 + tab[c][v][k]);
+                                    }
+                                    // if dip step
+                                    else if(k > 0)
+                                    {   
+                                        // updating current index to highest possible value with 1 less dip remaining
+                                        tab[i][j][k] = Math.max(tab[i][j][k], 1 + tab[c][v][k - 1]);
+                                    }
+                                    // putting highest value in best
+                                    if(tab[i][j][k] > best)
+                                    {
+                                        best = tab[i][j][k];
+                                    }
                                 }
                             }
                         }
