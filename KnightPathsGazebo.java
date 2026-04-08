@@ -3,3 +3,8 @@
     COP3503 Computer Science 2
     KnightPathsGazebo.java
 */
+
+public class KnightPathsGazebo
+{
+    
+}
