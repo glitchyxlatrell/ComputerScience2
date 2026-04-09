@@ -4,13 +4,28 @@
     KnightPathsGazebo.java
 */
 
+// importing to use arrayList, LinkedList, Queue, reversal of arraylist, scanner, and file I/O 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Collections;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+
 public class KnightPathsGazebo
 {
+    // class variables, so we can use values in other methods
+    int bestDistance = Integer.MAX_VALUE;
+    int bestStation = -1;
+    int bestGazebo = -1;
+
+
     // nested class to implement graph in adjacency list representation
     public class Graph
     {
         // storing number of vertices and an array list of linked lists to store where they point to
-        int numVertices;
+        int n;
         ArrayList<LinkedList<Integer>> adjacencyList = new ArrayList<LinkedList<Integer>>();
 
         // boolean lists to store which vertices are station, gazebos, or both
@@ -18,13 +33,13 @@ public class KnightPathsGazebo
         boolean[] stationList;
 
         // int to store start vertex
-        int startVertex = -1;
+        int s = -1;
         
         // constuctor for adj list
         public Graph(int n) {
             
             // storing num of vertices and creating boolean lists
-            this.numVertices = n;
+            this.n = n;
             gazeboList = new boolean[n + 1];
             stationList = new boolean[n + 1];
 
@@ -40,10 +55,10 @@ public class KnightPathsGazebo
     public void bfs(Graph list, int s, int[] distances, int[] predecessors)
     {
         // creating boolean list to track visited vertexes
-        boolean[] visitVertex = new boolean[list.numVertices + 1];
+        boolean[] visitVertex = new boolean[list.n + 1];
 
         // for every vertex, defaulting distance to max, predecessor to -1, and visted to false
-        for (int i = 1; i <= list.numVertices; i++) 
+        for (int i = 1; i <= list.n; i++) 
         {
             if (i != s) {
                 distances[i] = Integer.MAX_VALUE;
@@ -137,7 +152,7 @@ public class KnightPathsGazebo
 
         // getting and storing starting vertex
         int s = sc.nextInt();
-        mapList.startVertex = s;
+        mapList.s = s;
 
         // closing file and returning graph
         sc.close();
@@ -154,11 +169,11 @@ public class KnightPathsGazebo
 
         // initializing variable and arrays to track a path total, and distances/predecessors from a gazebo to a station
         int total = Integer.MAX_VALUE;
-        int [] stationDistances = new int[list.numVertices + 1];
-		int [] stationPredecessors = new int[list.numVertices + 1];
+        int [] stationDistances = new int[list.n + 1];
+		int [] stationPredecessors = new int[list.n + 1];
 
         // parsing through all vertices
-        for(int i = 1; i <= list.numVertices; i++)
+        for(int i = 1; i <= list.n; i++)
         {
             // if vertex is a gazebo, and reachable from start vertex
             if(list.gazeboList[i] && distances[i] < Integer.MAX_VALUE)
@@ -167,7 +182,7 @@ public class KnightPathsGazebo
                 bfs(list, i, stationDistances, stationPredecessors);
 
                 // parsing through all possible points again
-                for(int j = 1; j <= list.numVertices; j++)
+                for(int j = 1; j <= list.n; j++)
                 {
                     // if vertex is a station, and reachable from gazebo
                     if(list.stationList[j] && stationDistances[j] < Integer.MAX_VALUE)
@@ -180,6 +195,7 @@ public class KnightPathsGazebo
                         {   
                             // updating all values
                             bestDistance = total;
+                            this.bestStation = j;
                             bestStation = j;
                             bestGazebo = i;
                         }
@@ -189,6 +205,7 @@ public class KnightPathsGazebo
                             // checking if current station has lowest ID, updating if so
                             if(j < bestStation)
                             {
+                                this.bestStation = j;
                                 bestStation = j;
                             }
                             // if current station is best station already
@@ -206,22 +223,42 @@ public class KnightPathsGazebo
             }
         }
 
+        // setting class bestDistance equal to best
+        this.bestDistance = bestDistance;
+
         // initializing array lists to keep track of paths 
+        ArrayList<Integer> solutionPath = new ArrayList<Integer>();
+
+        // if could not find a solution path, class best distance equal to -1 and returns null for array list
+        if(bestStation == -1)
+        {
+            this.bestDistance = -1;
+            return null;
+        }
+
+        // updating station arrays to match up with best gazebo
+        bfs(list, bestGazebo, stationDistances, stationPredecessors);
+
+        // calling helper method to get best solution
+        solutionPath = getSolution(list, bestGazebo, bestStation, predecessors, stationPredecessors);
+
+        // returning solution path
+        return solutionPath;
+    }
+
+    // helper method to create final path
+    public ArrayList<Integer> getSolution(Graph list, int bestGazebo, int bestStation, int[] predecessors, int[] stationPredecessors)
+    {
+        // initializing final, first, and second paths to track predecessors and return solution
         ArrayList<Integer> finalPath = new ArrayList<Integer>();
         ArrayList<Integer> firstPath = new ArrayList<Integer>();
         ArrayList<Integer> secondPath = new ArrayList<Integer>();
-
-        // if could not find a solution path, returns an empty array list
-        if(bestStation == -1)
-        {
-            return finalPath;
-        }
 
         // temp variable to parse predecessors
         int tempGazebo = bestGazebo;
 
         // going until temp reaches start vertex
-        while(tempGazebo != list.s)
+        while(tempGazebo != list.s && tempGazebo != -1)
         {   
             // adding vertices from gazebo to start to first path
             firstPath.add(tempGazebo);
@@ -236,7 +273,7 @@ public class KnightPathsGazebo
         int tempStation = bestStation;
 
         // going until temp reaches best gazebo
-        while(tempStation != bestGazebo)
+        while(tempStation != bestGazebo && tempStation != -1)
         {
             // adding vertices from station to gazebo to second path
             secondPath.add(tempStation);
@@ -259,7 +296,43 @@ public class KnightPathsGazebo
             finalPath.add(secondPath.get(i));
         }
 
-        // returning final path
         return finalPath;
+    }
+
+    // method to print vertices of best path
+    public void printPath(ArrayList<Integer> solution)
+    {
+        // if no possible solution, printing
+        if(solution.size() == 0)
+        {
+            System.out.println("No such path exists!");
+            return;
+        }
+
+        // for loop to print vertices with space between each vertex
+        for(int i = 0; i < solution.size(); i++)
+        {
+            System.out.print(solution.get(i) + " ");
+        }
+    }
+
+    // method to return number of edges in best path
+    public int getBestDistance()
+    {
+        if(this.bestDistance == -1)
+        {
+            return 0;
+        }
+        return this.bestDistance;
+    }
+
+    // method to return station of best path
+    public int getBestStation()
+    {
+        if(this.bestStation == -1)
+        {
+            return 0;
+        }
+        return this.bestStation;
     }
 }
