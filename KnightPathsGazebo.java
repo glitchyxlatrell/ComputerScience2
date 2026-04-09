@@ -144,21 +144,122 @@ public class KnightPathsGazebo
         return mapList;
     }
 
-
+    // method that returns an array list with the solution path
     public ArrayList<Integer> computePath(Graph list, int[] distances, int[] predecessors)
     {
+        // initializing variables to track best station, gazebo, and distance
+        int bestGazebo = -1;
         int bestStation = -1;
-        int bestDistance = -1;
+        int bestDistance = Integer.MAX_VALUE;
 
+        // initializing variable and arrays to track a path total, and distances/predecessors from a gazebo to a station
+        int total = Integer.MAX_VALUE;
+        int [] stationDistances = new int[list.numVertices + 1];
+		int [] stationPredecessors = new int[list.numVertices + 1];
+
+        // parsing through all vertices
         for(int i = 1; i <= list.numVertices; i++)
         {
-            if(list.gazeboList[i])
+            // if vertex is a gazebo, and reachable from start vertex
+            if(list.gazeboList[i] && distances[i] < Integer.MAX_VALUE)
             {
-                if(distances[i] < Integer.MAX_VALUE)
+                // computing bfs from gazebo to a station, to get distance and predecessors
+                bfs(list, i, stationDistances, stationPredecessors);
+
+                // parsing through all possible points again
+                for(int j = 1; j <= list.numVertices; j++)
                 {
-                    
+                    // if vertex is a station, and reachable from gazebo
+                    if(list.stationList[j] && stationDistances[j] < Integer.MAX_VALUE)
+                    {
+                        // tracking total distance through distance arrays
+                        total = distances[i] + stationDistances[j];
+
+                        // if current path has best distance
+                        if(total < bestDistance)
+                        {   
+                            // updating all values
+                            bestDistance = total;
+                            bestStation = j;
+                            bestGazebo = i;
+                        }
+                        // if current distance is equal
+                        else if(total == bestDistance)
+                        {
+                            // checking if current station has lowest ID, updating if so
+                            if(j < bestStation)
+                            {
+                                bestStation = j;
+                            }
+                            // if current station is best station already
+                            else if(j == bestStation)
+                            {
+                                // checking if gazebo has lowest ID, updating if so
+                                if(i < bestGazebo)
+                                {
+                                    bestGazebo = i;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+
+        // initializing array lists to keep track of paths 
+        ArrayList<Integer> finalPath = new ArrayList<Integer>();
+        ArrayList<Integer> firstPath = new ArrayList<Integer>();
+        ArrayList<Integer> secondPath = new ArrayList<Integer>();
+
+        // if could not find a solution path, returns an empty array list
+        if(bestStation == -1)
+        {
+            return finalPath;
+        }
+
+        // temp variable to parse predecessors
+        int tempGazebo = bestGazebo;
+
+        // going until temp reaches start vertex
+        while(tempGazebo != list.s)
+        {   
+            // adding vertices from gazebo to start to first path
+            firstPath.add(tempGazebo);
+            tempGazebo = predecessors[tempGazebo];
+        }
+
+        // adding start vertex and reversing array list 
+        firstPath.add(tempGazebo);
+        Collections.reverse(firstPath);
+
+        // temp variable to parse station predecessors
+        int tempStation = bestStation;
+
+        // going until temp reaches best gazebo
+        while(tempStation != bestGazebo)
+        {
+            // adding vertices from station to gazebo to second path
+            secondPath.add(tempStation);
+            tempStation = stationPredecessors[tempStation];
+        }
+
+        // adding gazebo and reversing array list
+        secondPath.add(tempStation);
+        Collections.reverse(secondPath);
+
+        // adding first path into final
+        for(int i = 0; i < firstPath.size(); i++)
+        {
+            finalPath.add(firstPath.get(i));
+        }
+
+        // adding second path into final
+        for(int i = 1; i < secondPath.size(); i++)
+        {
+            finalPath.add(secondPath.get(i));
+        }
+
+        // returning final path
+        return finalPath;
     }
 }
