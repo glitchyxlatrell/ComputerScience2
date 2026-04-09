@@ -144,4 +144,21 @@ public class KnightPathsGazebo
         return mapList;
     }
 
+
+    public ArrayList<Integer> computePath(Graph list, int[] distances, int[] predecessors)
+    {
+        int bestStation = -1;
+        int bestDistance = -1;
+
+        for(int i = 1; i <= list.numVertices; i++)
+        {
+            if(list.gazeboList[i])
+            {
+                if(distances[i] < Integer.MAX_VALUE)
+                {
+                    
+                }
+            }
+        }
+    }
 }
