@@ -53,14 +53,14 @@ public class SkipList
             }
         }
 
-        // returning false if temp.next is null
-        if(temp.next[0] == null) 
+        // incrementing temp to NULL, a value greater than ID, or the ID we are searching for
+        temp = temp.next[0];
+
+        // returning false if temp is null
+        if(temp == null) 
         {
             return false;
         }
-
-        // incrementing temp to NULL, a value greater than ID, or the ID we are searching for
-        temp = temp.next[0];
 
         // if ID in temp is the ID we are looking for, returning true
         if(temp.studentID == studentID)
@@ -142,7 +142,46 @@ public class SkipList
     // function to remove ID from skip list
     public void delete(int studentID)
     {
+        // returning if student ID does not exist in list
+        if(!search(studentID))
+        {
+            return;
+        }
 
+        // Node array to track predecessors
+        Node[] predecessors = new Node[3];
+
+        // initializing temp node to search for ID
+        Node temp = head;
+
+
+        // searching through list starting at top level
+        for(int i = 2; i >= 0; i--)
+        {   
+            // while next node at level is not null and less than ID we are looking for
+            while(temp.next[i] != null && temp.next[i].studentID < studentID)
+            {   
+                // increment temp
+                temp = temp.next[i];
+            }
+
+            // putting temp into predecessors once traversed as much as possible in current level
+            predecessors[i] = temp;
+        }
+
+        Node deleteNode = temp.next[0];
+
+        // for each level ID should be in, inserting ID in valid spot
+        for(int i = 0; i < deleteNode.height; i++)
+        {   
+            // skipping deleteNode
+            predecessors[i].next[i] = deleteNode.next[i];
+        }
+
+
+        
+        // updating count
+        count--;
     }
 
     // function to return number of IDs currently stored
