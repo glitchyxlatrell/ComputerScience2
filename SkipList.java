@@ -53,8 +53,8 @@ public class SkipList
             }
         }
 
-        // returning false if temp is null
-        if(temp == null)
+        // returning false if temp.next is null
+        if(temp.next[0] == null) 
         {
             return false;
         }
