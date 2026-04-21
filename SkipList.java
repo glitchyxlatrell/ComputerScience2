@@ -178,8 +178,12 @@ public class SkipList
             predecessors[i].next[i] = deleteNode.next[i];
         }
 
+        // updating highestLevel in case of deleted node was the only node at certain level(s)
+        while(head.next[highestLevel - 1] == null && highestLevel != 0)
+        {
+            highestLevel--;
+        }
 
-        
         // updating count
         count--;
     }
